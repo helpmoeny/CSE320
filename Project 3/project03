@@ -1,0 +1,62 @@
+
+
+CSE 320 Fall 2015
+
+Computer Project #3 -- Combinational Circuits (Part II)
+
+Assignment Overview:
+
+  This assignment develops familiarity with combinational circuits, as well as
+  the "sim" software simulation package.  You will implement and test the
+  combinational circuits which you designed in Computer Project #2.
+
+  It is worth 40 points (4% of course grade), and must be completed no later
+  than 11:59 PM on Thursday, September 24.
+
+Assignment Specifications:
+
+  The design requirements are the same as for Computer Project #2.
+
+  Your implementation will be formalized by creating a C++ source code file
+  which represents the minimized version of each function in your circuits and
+  serves as input to the "sim" package.
+
+  You will execute the simulator using "sim proj03.netlist.c".
+
+Assignment Deliverables:
+
+  The deliverable for this assignment is:
+
+    proj03.netlist.c -- the implementation file for your solution
+
+  Be sure to use the specified file name, and to submit your file for grading
+  via the handin program.
+
+Assignment Notes:
+
+  To implement your circuits, you will create two functions:  "simnet" and
+  "circuits".  A skeleton for the C++ source code for those two functions is
+  available on the system:
+
+    /user/cse320/Projects/project03.netlist.c
+
+  Function "simnet" will serve as a test fixture which allows the user to
+  produce hexadecimal digits and observe the resulting outputs.  The input
+  will be generated using a four-bit counter (controlled by pulsers), and the
+  results will be displayed using eight probes.
+
+  The pulsers used in conjunction with the four-bit counter will be placed
+  vertically on the left edge of the "sim" window.
+
+  The eight probes will be placed near the right edge of the "sim" window.
+  The "Present" probe will be placed at the top of the "sim" window, while the
+  probes for the other seven functions ("a", "b", and so on) will be placed
+  below the "Present" probe in the "Figure 8" pattern used by a seven-segment
+  display.
+
+  All pulsers and probes will be appropriately labeled in the "sim" window.
+
+  Function "circuits" will serve as the implementation of your eight Boolean
+  functions ("Present", and "a" through "g").  You will use "Not", "And" and
+  "Or" components to construct your four Boolean functions.
+

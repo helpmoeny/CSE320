@@ -1,0 +1,94 @@
+
+
+CSE 320 Fall 2015
+
+Computer Project #2 -- Combinational Circuits (Part I)
+
+Assignment Overview:
+
+  This assignment develops familiarity with combinational circuits.  You will
+  design the combinational circuits specified below.
+
+  It is worth 40 points (4% of course grade), and must be completed no later
+  than 11:59 PM on Thursday, September 17.
+
+Assignment Specifications:
+
+  Consider your nine-character MSU PID as a sequence of hexadecimal digits.
+  You will design combinational circuits which recognize those digits and map
+  them to the appropriate segments in a seven-segment display.
+
+  A seven-segment display uses seven LEDs to represent hexadecimal digits.
+  Assuming the seven segments are labeled as shown below, then each digit can
+  be displayed by lighting a subset of the segments.
+
+        a
+       ---
+      |   |
+    f | g | b
+       ---
+      |   |
+    e | d | c
+       ---
+
+  For example, the hexadecimal digit '9' can be displayed by lighting all of
+  the segments except segment e.  Similarly, the hexadecimal digit 'A' can be
+  displayed by lighting all of the segments except segment d.
+
+  Your circuits will accept four inputs (the four bits in a hexadecimal digit)
+  and will produce eight outputs:  the "Present" signal and the seven signals
+  associated with the seven-segment display.
+
+  The "Present" signal will be asserted when the four input signals represent
+  a hexadecimal digit in your personal MSU PID; it will be deasserted for all
+  other cases.  That is, the function will recognize the hexadecimal digits
+  which are present in your MSU PID.
+
+  For each hexadecimal digit which appears in your MSU PID, the circuits will
+  will produce the correct value for each of the display signals.  Otherwise,
+  the value of each display signal is irrelevant.
+
+  Your design will be formalized by completing the requested information in
+  the file "~cse320/Projects/project02.design".
+
+Assignment Deliverables:
+
+  The deliverable for this assignment is:
+
+    proj02.design -- the text file for your design
+
+  Be sure to use the specified file name, and to submit your file for grading
+  via the handin system.
+
+
+
+Assignment Notes:
+
+  1) The following chart indicates which segments are used for a given
+  hexadecimal digit.
+
+     ---+--------------------
+      0 | a, b, c, d, e, f
+      1 | b, c
+      2 | a, b, d, e, g
+      3 | a, b, c, d, g
+      4 | b, c, f, g
+      5 | a, c, d, f, g
+      6 | a, c, d, e, f, g
+      7 | a, b, c
+      8 | a, b, c, d, e, f, g
+      9 | a, b, c, d, f, g
+      A | a, b, c, e, f, g
+      B | c, d, e, f, g
+      C | a, d, e, f
+      D | b, c, d, e, g
+      E | a, d, e, f, g
+      F | a, e, f, g
+
+  2) The minimized expressions for your eight functions must be given in sum
+  of products form.  That is, each function must be expressed using one or
+  more products (AND terms), and at most one sum (OR term).
+
+  3) In Part II of this assignment, you will implement and test the circuits
+  which you designed.
+

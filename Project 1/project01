@@ -1,0 +1,59 @@
+
+
+CSE 320 Fall 2015
+
+Computer Project #1 -- The CSE Solaris Environment
+
+Assignment Overview:
+
+  This assignment will help you become familiar with the computing environment
+  that will be used for this course.  You will complete the exercises below
+  and submit your work for grading via the handin system.
+
+  It is worth 10 points (1% of course grade), and must be completed no later
+  than 11:59 PM on Thursday, September 10.
+
+Assignment Specifications:
+
+  1) This assignment will be completed using the CSE Solaris environment (the
+  the server "north.cse.msu.edu").
+
+  2) Open a web browser and review the following tutorial:
+
+    http://www.cse.msu.edu/~cse320/Tutorial/
+
+  The tutorial contains seven short lessons about UNIX and UNIX-like systems.
+
+  3) Complete the tutorial about the "vim" editor using the steps below.
+
+  a) Log onto "north" using your CSE account.
+
+  b) Copy the file named "/user/cse320/Projects/project01.tutorial" into your
+  account as the file named "proj01.tutorial":
+
+    cp /user/cse320/Projects/project01.tutorial proj01.tutorial
+
+  c) Execute the "vim" editor and follow the directions in the tutorial:
+
+    vim proj01.tutorial
+
+  d) When you have completed the tutorial, use the CSE handin system to
+  submit your edited file for grading.
+
+Assignment Deliverables:
+
+  The deliverable for this assignment is the following:
+
+    proj01.tutorial -- your edited version of the tutorial file
+
+  Be sure to use the specified file name, and to submit your file for grading
+  via the handin system.
+
+Assignment Notes:
+
+  1) You will use the CSE server "north" for all of your work in this course.
+
+  2) The CSE handin system can be accessed using a web browser and using a
+  command in the terminal window.  It would be best if you were comfortable
+  with both methods.
+

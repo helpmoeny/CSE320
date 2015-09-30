@@ -1,0 +1,91 @@
+
+Notes on Computer Project #1
+----------------------------
+
+Comments about the assignment and responses to frequently asked questions will
+be added to this file as necessary.
+
+***** comments added on 08/30/15 *****
+
+1) Please note the following statement from the assignment handout:
+
+  The deliverable for this assignment is the following:
+
+    proj01.tutorial -- your edited version of the tutorial file
+
+  Be sure to use the specified file name, and to submit your file for
+  grading via the handin system.
+
+Please note the handin system will not accept any file names which do not fit
+the specified patterns.
+
+If you are not familiar with the handin system, it is a utility program that
+allows you to submit files for grading.  There are two ways to run the
+program:  via a command in a terminal window and via a web browser.
+
+To run the handin system in a terminal window, simply type "handin" at the
+prompt and follow the directions:
+
+  <north> handin
+
+You will need to run the program once for each file that you wish to submit,
+and you will be prompted to enter your CSE password each time.  For example, a
+student enrolled in Section 1 would use the following command to submit the
+deliverable:
+
+  <north> handin CSE320:1:FS15 1 proj01.tutorial
+
+I have created a shell script which will make it easier to run "handin" from
+"north".  If you wish to use that shell script, please examine the contents
+of the following file:
+
+  /user/cse320/bin/submit
+
+As noted in the comments at the top of that file, you'll need to copy the
+shell script into your account.
+
+To run "handin" via a web browser, use the following URL:
+
+  http://secure.cse.msu.edu/handin/
+
+Although the command-line version of "handin" requires you to submit files
+individually, it may be the better alternative for this course since it can be
+executed whenever you are logged onto "north".
+
+To use the web-based version, you may need to download your files to the
+personal computer where the web browser is executing, which then means that
+you have multiple copies of your files.  You may be able to map a network
+drive and access your CSE files directly, particularly if you are on campus.
+
+Please note that it is possible to submit your solution files multiple times:
+the last files that you submit will be graded.
+
+2) To access "north" remotely, I would recommend using the SSH network
+protocol.  Many personal computers already have a "ssh" package installed
+(Linux and Mac OS systems), or you can download and install a free package for
+Windows systems from the CSE Facilities web pages:
+
+  http://www.cse.msu.edu/Facility/Services/SSH_Docs.php
+
+Additional information is posted on the course web page:
+
+  http://www.cse.msu.edu/~cse320/General/intro.system
+
+There are other methods for remotely accessing "north", but "ssh" is one of
+the most convenient.
+
+3) The "vim" tutorial discusses a start-up file named ".vimrc".  I have posted
+a sample start-up file which you may wish to copy into your account.  While
+positioned in your home directory, issue the following command:
+
+  cp /user/cse320/Projects/project01.vimrc .vimrc
+
+Note that the name of the file in your home directory should be ".vimrc".  To
+display all of the "dot" files in a particular directory:
+
+  ls -al
+
+Please note that the "ls" options are lower case "A" and "L".
+
+--M. McCullen
+
