@@ -47,10 +47,10 @@ void circuits( SD sd, Signal Init, Signal Clock,
   Signal notw, notx, noty, notz, wand1, wand2, wand3, xand1, xand2, xand3, yand1, yand2, yand3, zand1, zand2, zand3, W, X, Y, Z;
   
   // Insert your DFFs here
-  Dff ((SD("eb"), "Dff3"), (Init, W, Clock, Zero), w);
-  Dff ((SD("fb"), "Dff2"), (Zero, X, Clock, Init), x);
-  Dff ((SD("gb"), "Dff1"), (Init, Y, Clock, Zero), y);
-  Dff ((SD("hb"), "Dff0"), (Zero, Z, Clock, Init), z);
+  Dff ((SD(sd, "eb"), "Dff3"), (Init, W, Clock, Zero), w);
+  Dff ((SD(sd, "fb"), "Dff2"), (Zero, X, Clock, Init), x);
+  Dff ((SD(sd, "gb"), "Dff1"), (Init, Y, Clock, Zero), y);
+  Dff ((SD(sd, "hb"), "Dff0"), (Zero, Z, Clock, Init), z);
 
   // Insert your combinational logic here (Not, And, Or gates)
   Not ( SD(sd, "1a"), w, notw);
@@ -58,24 +58,18 @@ void circuits( SD sd, Signal Init, Signal Clock,
   Not ( SD(sd, "3a"), y, noty);
   Not ( SD(sd, "4a"), z, notz);
   
-  And ( SD(sd, "2d"), (w, notx, noty, notz), wand1); // For W()
-  And ( SD(sd, "2d"), (w, notx, noty, z), wand2);
-  And ( SD(sd, "2d"), (w, notx, y, notz), wand3);
-  Or ( SD(sd, "2d"), (wand1, wand2, wand3), W);
+  And ( SD(sd, "2d"), (z), wand1); // For W()
+  And ( SD(sd, "2d"), (x, noty), wand2);
+  Or ( SD(sd, "2d"), (wand1, wand2), W);
   
-  And ( SD(sd, "2d"), (notw, x, noty, notz), xand1); // For X()
-  And ( SD(sd, "2d"), (notw, x, noty, z), xand2);
-  And ( SD(sd, "2d"), (notw, x, y, notz), xand3);
-  Or ( SD(sd, "2d"), (xand1, xand2, xand3), X);
+  Or ( SD(sd, "2d"), (y), X); //For X()
   
-  And ( SD(sd, "2d"), (notw, notx, y, notz), yand1); // For Y()
-  And ( SD(sd, "1c"), (notw, x, y, notz), yand2);
-  And ( SD(sd, "2c"), (w, notx, y, notz), yand3);
-  Or ( SD(sd, "2d"), (yand1, yand2, yand3), Y);
+  And ( SD(sd, "2d"), (notw, notx), yand1); // For Y()
+  And ( SD(sd, "1c"), (notx, noty), yand2);
+  Or ( SD(sd, "2d"), (yand1, yand2), Y);
   
-  And ( SD(sd, "2d"), (notw, x, noty, z), zand1); // For Z()
-  And ( SD(sd, "1c"), (w, notx, noty, z), zand2);
+  And ( SD(sd, "2d"), (x, y), zand1); // For Z()
+  And ( SD(sd, "1c"), (x, z), zand2);
   Or ( SD(sd, "2d"), (zand1, zand2), Z);
-  
 }
 

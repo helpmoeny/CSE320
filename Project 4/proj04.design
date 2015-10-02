@@ -6,11 +6,11 @@ Computer Project #4 -- Sequential Circuits
 
 a) Give your name, MSU PID and sequence derived from your MSU PID.
 
-  Name:
+  Name:James Mitchell
 
-  MSU PID:
+  MSU PID:A48286659
 
-  Derived sequence:
+  Derived sequence:A482659
  
 
 b) Complete the following truth tables to describe the Boolean functions which
@@ -21,22 +21,22 @@ condition.
   Current   Next
   w x y z | W() X() Y() Z()
   --------+----------------
-  0 0 0 0 |  -   -   -   - 
-  0 0 0 1 |  -   -   -   - 
-  0 0 1 0 |  -   -   -   - 
-  0 0 1 1 |  -   -   -   - 
-  0 1 0 0 |  -   -   -   - 
-  0 1 0 1 |  -   -   -   - 
-  0 1 1 0 |  -   -   -   - 
-  0 1 1 1 |  -   -   -   - 
-  1 0 0 0 |  -   -   -   - 
-  1 0 0 1 |  -   -   -   - 
-  1 0 1 0 |  -   -   -   - 
-  1 0 1 1 |  -   -   -   - 
-  1 1 0 0 |  -   -   -   - 
-  1 1 0 1 |  -   -   -   - 
-  1 1 1 0 |  -   -   -   - 
-  1 1 1 1 |  -   -   -   - 
+  0 0 0 0 |  x   x   x   x 
+  0 0 0 1 |  x   x   x   x 
+  0 0 1 0 |  0   1   1   0 
+  0 0 1 1 |  x   x   x   x 
+  0 1 0 0 |  1   0   0   0 
+  0 1 0 1 |  1   0   0   1 
+  0 1 1 0 |  0   1   0   1 
+  0 1 1 1 |  x   x   x   x 
+  1 0 0 0 |  0   0   1   0 
+  1 0 0 1 |  1   0   1   0 
+  1 0 1 0 |  0   1   0   0 
+  1 0 1 1 |  x   x   x   x 
+  1 1 0 0 |  x   x   x   x 
+  1 1 0 1 |  x   x   x   x 
+  1 1 1 0 |  x   x   x   x 
+  1 1 1 1 |  x   x   x   x 
 
 
 c) Complete the following Karnaugh maps for your Boolean functions.  For each
@@ -45,36 +45,36 @@ input combination, replace the hyphen with the appropriate entry (0, 1 or d).
 
    W()  | y'z'| y'z | yz  | yz' |           X()  | y'z'| y'z | yz  | yz' |
    -----+-----+-----+-----+-----+           -----+-----+-----+-----+-----+
-   w'x' |  -  |  -  |  -  |  -  |           w'x' |  -  |  -  |  -  |  -  |
+   w'x' |  x  |  x  |  x  |  0  |           w'x' |  x  |  x  |  x  |  1  |
         +-----+-----+-----+-----+                +-----+-----+-----+-----+
-   w'x  |  -  |  -  |  -  |  -  |           w'x  |  -  |  -  |  -  |  -  |
+   w'x  |  1  |  1  |  x  |  0  |           w'x  |  0  |  0  |  x  |  1  |
         +-----+-----+-----+-----+                +-----+-----+-----+-----+
-   wx   |  -  |  -  |  -  |  -  |           wx   |  -  |  -  |  -  |  -  |
+   wx   |  x  |  x  |  x  |  x  |           wx   |  x  |  x  |  x  |  x  |
         +-----+-----+-----+-----+                +-----+-----+-----+-----+
-   wx'  |  -  |  -  |  -  |  -  |           wx'  |  -  |  -  |  -  |  -  |
+   wx'  |  0  |  1  |  x  |  0  |           wx'  |  0  |  0  |  x  |  1  |
         +-----+-----+-----+-----+                +-----+-----+-----+-----+
 
 
    Y()  | y'z'| y'z | yz  | yz' |           Z()  | y'z'| y'z | yz  | yz' |
    -----+-----+-----+-----+-----+           -----+-----+-----+-----+-----+
-   w'x' |  -  |  -  |  -  |  -  |           w'x' |  -  |  -  |  -  |  -  |
+   w'x' |  x  |  x  |  x  |  1  |           w'x' |  x  |  x  |  x  |  0  |
         +-----+-----+-----+-----+                +-----+-----+-----+-----+
-   w'x  |  -  |  -  |  -  |  -  |           w'x  |  -  |  -  |  -  |  -  |
+   w'x  |  0  |  0  |  x  |  0  |           w'x  |  0  |  1  |  x  |  1  |
         +-----+-----+-----+-----+                +-----+-----+-----+-----+
-   wx   |  -  |  -  |  -  |  -  |           wx   |  -  |  -  |  -  |  -  |
+   wx   |  x  |  x  |  x  |  x  |           wx   |  x  |  x  |  x  |  x  |
         +-----+-----+-----+-----+                +-----+-----+-----+-----+
-   wx'  |  -  |  -  |  -  |  -  |           wx'  |  -  |  -  |  -  |  -  |
+   wx'  |  1  |  1  |  x  |  0  |           wx'  |  0  |  0  |  x  |  0  |
         +-----+-----+-----+-----+                +-----+-----+-----+-----+
 
 
 d) Give the minimized (simplified) expression for each of the Boolean
 functions.
  
-   W(w,x,y,z) =
+   W(w,x,y,z) = z + xy';
  
-   X(w,x,y,z) =
+   X(w,x,y,z) = y;
  
-   Y(w,x,y,z) =
+   Y(w,x,y,z) = w'x' + x'y';
  
-   Z(w,x,y,z) =
+   Z(w,x,y,z) = xy + xz;
  
