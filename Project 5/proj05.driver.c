@@ -1,4 +1,3 @@
-//Author james Mithell
 //cse320 section 1
 
 #include <stdio.h>
