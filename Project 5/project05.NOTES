@@ -1,0 +1,384 @@
+
+Notes on Computer Project #5
+----------------------------
+
+Comments about the assignment and responses to frequently asked questions will
+be added to this file as necessary.
+
+***** comments added on 09/28/15 *****
+
+1) Please note the following statement from the assignment handout:
+
+  The deliverables for this assignment are:
+
+    proj05.makefile  -- the makefile which produces "proj05"
+    proj05.support.c -- the source code for your conversion module
+    proj05.driver.c  -- the source code for your driver module
+    proj05.tests     -- the input to your driver module, if needed
+
+  Be sure to use the specified file names, and to submit your files for
+  grading via the "handin" program.
+
+It is possible to submit your solution files multiple times:  the last files
+which you submit will be graded.
+
+2) Please note that you are required to create a makefile which controls the
+translation of your program, and that the name of your executable file must be
+"proj05".
+
+If you're not familiar with "make", please review the information at:
+
+  ~cse320/General/intro.make
+
+That overview of "make" is also available in the course pack.  Additional
+information is available via "man make".
+
+3) For your convenience, I have supplied the following file:
+
+  ~cse320/Projects/project05.support.h
+
+That file contains one C statement:  the declaration of function "convert".
+Since a function must be declared before it is used, your driver module should
+contain the statement:
+
+  int convert( const char[], int, int* );
+
+or the statement:
+
+  #include "/user/cse320/Projects/project05.support.h"
+
+To permit the compiler to do as much error checking as possible, your support
+module should also contain one of the two statements above.
+
+Please note that you should not copy "project05.support.h" into your account,
+since you will not be able to submit that file as part of your solution.
+
+4) In general, preprocessor "include" directives should only be used with
+interface files (".h" files), not C source code files (".c" files).
+
+Consider the the following preprocessor directives:
+
+  #include <stdio.h>
+  #include "/user/cse320/Projects/project05.support.h"
+  #include "proj05.support.c"
+
+The first and second directives could appear in your "proj05.driver.c", but
+the third is not appropriate.
+
+5) A polynomial can be evaluated without computing the powers of the base; the
+technique is called "nesting".  For example:
+
+    4     3     2     
+  ar  + br  + cr  + dr + e  =  ((((( 0 )r + a)r + b)r + c)r + d)r + e
+
+Note that only one multiply and one addition are needed for each digit.
+
+Of course, there are additional considerations when converting from external
+representation to internal representation.
+
+Consider the problem of converting the character sequence "-325" into the
+value negative three hundred twenty five (as a twos complement number).  One
+method:
+
+  int Result = - (('3'-'0')*10*10 + ('2'-'0')*10 + ('5'-'0'));
+
+Since the machine uses the twos complement system, the end result of the
+series of operations is that "Result" contains the twos complement notation
+for the value negative three hundred twenty five:
+
+  11111111111111111111111010111011
+
+Clearly, this method is not general enough, since it only converts one
+specific value.  However, it shows the kinds of operations which could be used
+to convert from external representation to internal representation.
+
+6) Note the difference between the value of a variable and how that value is
+represented.
+
+Consider the value twelve.  That value can be represented in a number of
+different ways in mathematics:
+
+  30 base 4
+  14 base 8
+  12 base 10
+  C base 16
+
+Similarly, there are three different literals to represent twelve in C:
+
+  014  /* octal literal */
+  12   /* decimal literal */
+  0xC  /* hexadecimal literal */
+
+The "printf" function is capable of producing octal, decimal and hexadecimal
+representations of a given value.  The twos complement notation cannot be
+directly displayed, but it is easy to generate through shifting and masking
+(the "bitlib" functions used in Example #3).
+
+Consider the following example:
+
+  #include <stdio.h>
+  #include "/user/cse320/lib/bitlib.h"
+
+  int main()
+  {
+    int A;
+
+    A = 12;
+    printf( "A:  %o (base 8)\n",  A );
+    printf( "A:  %d (base 10)\n", A );
+    printf( "A:  %x (base 16)\n", A );
+    printf( "A:  %32s (twos complement)\n", bit32(A) );
+  }
+
+  <prompt> gcc source.c /user/cse320/lib/bitlib.o
+  <prompt> a.out
+
+  A:  14 (base 8)
+  A:  12 (base 10)
+  A:  c (base 16)
+  A:  00000000000000000000000000001100 (twos complement)
+
+Please note that the "%o" and "%x" format specs display integer values as if
+they were of type "unsigned int".  Thus, when "A" is changed to a negative
+value, the output is quite different:
+
+  #include <stdio.h>
+  #include "/user/cse320/lib/bitlib.h"
+
+  int main()
+  {
+    int A;
+
+    A = -17;
+    printf( "A:  %o (base 8)\n",  A );
+    printf( "A:  %d (base 10)\n", A );
+    printf( "A:  %x (base 16)\n", A );
+    printf( "A:  %32s (twos complement)\n", bit32(A) );
+  }
+  
+  A:  37777777757 (base 8)
+  A:  -17 (base 10)
+  A:  ffffffef (base 16)
+  A:  11111111111111111111111111101111 (twos complement)
+
+Summary:  the external representation of an integer value is some series of
+characters used to convey meaning to a human (or a compiler); the internal
+representation of an integer value is a bit pattern which is meaningful in the
+twos complement system.
+
+7) Don't lose sight of the fact that all signed integers are stored as twos
+complement bit patterns on the SPARC microprocessor (and most other systems).
+ 
+That is, the internal representation of all signed integer values is done in
+the twos complement system on the SPARC microprocessor.  And, all arithmetic
+operations on signed integers is done within the twos complement system.
+
+For the convenience of programmers and users, compilers and I/O libraries have
+functions to convert between the external representation of a given value and
+its internal representation in twos complement form.
+
+Two brief examples:
+
+  int A, B;
+
+  // Put the twos complement representation of negative fifteen into A
+
+  A = -15;
+
+  // Put the twos complement representation of negative fifteen into B
+  // (assuming that the user types the characters "-15")
+
+  scanf( "%d", &B );
+
+You may wish to review Item (6) above, since it addresses this same issue,
+with an emphasis on output operations.
+
+8) Consider the following C source code:
+
+  #include "/user/cse320/Projects/project05.support.h"
+
+  int main()
+  {
+    char A[] = "  -3A ";
+    int B = 16;
+    int C;
+    int D;
+
+    D = convert( &A[0], B, &C );
+
+    return 0;
+  }
+
+Note that the third argument to "convert" is a variable of type "int" (not an
+array of type "int").
+
+Be sure you understand what is passed to the conversion function.  If the
+conversion function simply prints out each argument in base 16 and base 2, the
+following is the output for the function call given above:
+
+  Inside "convert":
+
+    Argument #1:  ffbff900  (11111111101111111111100100000000)
+    Argument #2:  00000010  (00000000000000000000000000010000)
+    Argument #3:  ffbff8f8  (11111111101111111111100011111000)
+
+Note that the second argument to "convert" is an integer value; the other two
+arguments are addresses (pointers).
+
+9) Please note that a number of the parameters passed to the functions in this
+project are pointers (addresses of data objects).  To refresh your memory
+about pointers, consider the example below.
+
+  #include <stdio.h>
+
+  int half( int, int* );
+ 
+  //***************************************************************************
+  // Function main
+  //***************************************************************************
+ 
+  int main()
+  {
+    int A, B, flag;
+ 
+    // Put the value 12 (in twos complement form) into A,
+    // then call half() to put the value 12/2 into B.
+ 
+    A = 12;
+    flag = half( A, &B );
+ 
+    // Display the contents of A, B and flag in base 10
+    // (use base 10 for the external representation)
+ 
+    printf( "A: %d  B: %d  flag: %d\n", A, B, flag );
+ 
+    // Put the value 12 (in twos complement form) into A,
+    // then call half() to put the value 15/2 into B.
+ 
+    A = 15;
+    flag = half( A, &B );
+ 
+    // Display the contents of A, B and flag in base 10
+    // (use base 10 for the external representation)
+ 
+    printf( "A: %d  B: %d  flag: %d\n", A, B, flag );
+ 
+    return 0;
+  }
+ 
+  //***************************************************************************
+  // Function half
+  //
+  // Argument #1:  32-bit twos complement number to be halved
+  // Argument #2:  pointer to result (32-bit twos comp number / 2)
+  //
+  // Return value:  0 (success) or 1 (failure)
+  //***************************************************************************
+ 
+  int half( int orig_value, int* result_address )
+  {
+    int return_value, computed_result;
+ 
+    computed_result = orig_value / 2;
+ 
+    if (computed_result * 2 == orig_value)
+    {
+      return_value = 0;
+    }
+    else
+    {
+      return_value = 1;
+    }
+     
+    *result_address = computed_result;
+ 
+    return return_value;
+  }
+ 
+When compiled, linked and executed, the program produces:
+ 
+  A: 12  B: 6  flag: 0
+  A: 15  B: 7  flag: 1
+ 
+Please note the use of the "&" operator to get the address of a data object.
+
+10) Please note the following from the project handout:
+
+  You will develop a driver module to test your implementation of the
+  conversion module.  The source code for the driver module must be in a
+  separate file.  All output will be appropriately labeled.
+
+  Your driver module will not be interactive.  If it accepts any input, you
+  will supply that input in a text file named "proj05.tests".
+
+An interactive program is one in which the user enters inputs in response to
+prompts.  Since that approach is prohibited for this assignment, your driver
+module will NOT contain code segments such as the following:
+
+  printf ) "Enter an angle in radians:" );
+  scanf( "%f", &AngleRadians );
+
+Instead of prompting the user to enter test cases, there are two approaches
+you may use:
+
+  a) Embed the test cases in the driver module as constants.
+  b) Input the test cases from a text file (without prompting the user).
+
+The first approach (embedding the test cases in the driver module) is the
+preferred approach for this project since it will facilitate incremental
+development of the driver module and the library module.
+
+For example, if you were going to test "sin" (from the math library), you
+might use a series of statements such as:
+
+  printf( "%f\n", sin( 0.0 ) );
+  printf( "%f\n", sin( 0.5 ) );
+  printf( "%f\n", sin( 1.0 ) );
+
+Obviously, that code segment is too crude -- the test cases aren't
+particularly good, and the output isn't labeled or formatted.  However, it
+illustrates the general approach for a driver module which doesn't accept any
+input.
+
+The second approach (inputting the test cases from a text file) can be useful
+in some circumstances, but might be problematic for this project.  If you
+decide to use that approach, you would then use input redirection when you
+executed your program:
+
+  <prompt> a.out < proj05.tests
+
+Regardless of which of the two methods you use to develop your driver module,
+note that your test cases will be available when your solution is graded since
+they will either be embedded in the driver module or present in "proj05.tests".
+
+11) To visualize the results of the conversion, I'd recommend displaying the
+converted value in hexadecimal (and perhaps in binary).
+
+Consider the following code segment:
+
+  char A[] = "177";
+  int B = 8;
+  int C;
+  int D;
+
+  D = convert( &A[0], B, &C );
+
+  printf( "Value: %s base %d\n\n", A, B );
+
+  printf( "Decimal: %d  Hexadecimal: %08x  Bits: %s\n\n", C, C, bit32(C) );
+
+and the output it produces:
+
+  Value: 177 base 8
+
+  Decimal: 127  Hexadecimal: 0000007f  Bits: 00000000000000000000000001111111
+
+Even without using "bit32", the two's complement representation can easily be
+visualized by mapping each hexadecimal digit to four binary digits:
+
+  0000007f ==> 0000 0000 0000 0000 0000 0000 0111 1111
+
+Notice that I put a blank between each group of four bits for clarity.
+
+--M. McCullen
+

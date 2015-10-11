@@ -1,0 +1,119 @@
+
+
+CSE 320 Fall 2015
+
+Computer Project #5 -- Twos Complement Representation
+
+Assignment Overview:
+
+  This assignment develops familiarity with the C programming language, the
+  "gcc" compiler, number systems, and twos complement representation.
+
+  It is worth 40 points (4% of course grade), and must be completed no later
+  than 11:59 PM on Thursday, October 8.
+
+Assignment Specifications:
+
+  1) You will develop a C module which supports the conversion of integer
+  values between external representation and internal representation.  The
+  module will consist of function "convert" and any other supporting functions
+  you choose to develop.  The interface to the module is:
+
+    int convert( const char[], int, int* );
+
+  The first argument is the address of an array that contains the external
+  representation of the value which is to be converted.
+
+  The second argument is the value of the base in which the first argument is
+  represented.  Valid bases range from 2 to 36 (inclusive).
+
+  The third argument is the address of a scalar where the function will store
+  the equivalent internal representation of the first argument.
+
+  Function "convert" will return the integer value one if the conversion is
+  successful, and the integer value zero otherwise.
+
+  The external representation of the value to be converted (the first argument
+  to "convert") is a null-terminated sequence of ASCII characters.  It is
+  composed of three disjoint substrings:  a substring of zero or more white
+  space characters (blanks, tabs and newlines), a substring which represents
+  the specified value (called the subject substring), and a substring of one
+  or more unprocessed characters (including the terminating null).
+
+  The subject substring is defined as the longest possible substring which is
+  of the expected form.  It begins immediately after any leading white space,
+  and terminates with the first invalid character.  The subject substring may
+  not be empty.
+
+  The subject substring represents a signed value.  A negative value is
+  indicated by the character '-'; a positive value is indicated by the
+  character '+' or no sign character.  Negative zero is represented by the
+  subject substring "-0", and positive zero is represented by the subject
+  substring "+0" or "0".
+
+  In the subject substring, alphabetic characters are used to represent digits
+  for bases greater than 10.  Both upper and lower case letters are valid.
+
+  2) You will develop a driver module to test your implementation of the
+  conversion module.  The source code for the driver module must be in a
+  separate file.  All output will be appropriately labeled.
+
+  Your driver module will not be interactive.  If it accepts any input, you
+  will supply that input in a text file named "proj05.tests".
+
+
+
+Assignment Deliverables:
+
+  The deliverables for this assignment are:
+
+    proj05.makefile  -- the makefile which produces "proj05"
+    proj05.support.c -- the source code for your conversion module
+    proj05.driver.c  -- the source code for your driver module
+    proj05.tests     -- the input to your driver module, if needed
+
+  Be sure to use the specified file names, and to submit your files for
+  grading via the "handin" program.
+
+Assignment Notes:
+
+  Please note that your source code must be translated by "gcc", which is a C
+  compiler and accepts C source statements (a subset of C++).
+
+  Please note that you must supply a "makefile" (named "proj05.makefile"), and
+  that your makefile must produce an executable program named "proj05".
+
+  Please note that your driver module may not be written as an interactive
+  program, where the user supplies input in response to prompts.  Instead,
+  your test cases will either be included in the source code as literal
+  constants, or will be supplied as inputs to the driver module in a file
+  named "proj05.tests".
+
+  If your driver requires no inputs, your solution will be executed using:
+
+    proj05
+
+  If your driver does require inputs, your solution will be executed using:
+
+    proj05 < proj05.tests
+
+  You may not call any C library functions from your conversion module.  That
+  is, you may not call functions such as "printf", "scanf", "atoi", or
+  "isspace" from "convert" or any other function in your conversion module.
+
+  Your conversion module must convert between integers and characters without
+  using any C library functions.  The equivalent integer value of a character
+  from the set {0..9} representing a decimal digit may be obtained by:
+
+    char ch;  
+    int value = ch - '0';
+
+  Similarly, the equivalent integer value of a character from the set {A..F}
+  representing a hexadecimal digit may be obtained by:
+
+    char ch;
+    int value = (ch - 'A') + 10;
+
+  Chapter 2 of the Murdocca and Heuring text contains relevant information
+  about number systems (particularly pages 22-24).
+
