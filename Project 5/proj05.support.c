@@ -18,7 +18,7 @@ int convert( const char ch[], int base, int* num)
   if(base >36 || base<2){return 1;}
   int negative_value =0;
   int value = 0;
-  
+  *num = 0;
   //int value = ch - '0';
   //int value = (ch - 'A') + 10;
   int i =0;
