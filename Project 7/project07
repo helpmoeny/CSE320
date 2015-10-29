@@ -1,0 +1,119 @@
+
+
+CSE 320 Fall 2015
+
+Computer Project #7 -- The ARC Instruction Set Architecture
+
+Assignment Overview:
+
+  This assignment develops familiarity with the instruction set architecture
+  of the ARC microprocessor, as well as the format of its machine language
+  instructions.
+
+  It is worth 30 points (3% of course grade), and must be completed no later
+  than 11:59 PM on Thursday, October 29.
+
+Assignment Specifications:
+
+  1) Your program will consist of two modules:  a driver module (function
+  "main" and any associated functions) which is the interface to the user, and
+  a support module (function "decode" and any associated functions) which
+  converts a subset ARC machine language instruction to human-readable form.
+
+  The interface between the two modules is given as:
+
+    void decode( unsigned, char[] );
+
+  where the first argument is the bit pattern representing an ARC machine
+  language instruction, and the second argument is the address of an array.
+
+  2) The support module will accept the bit pattern for an ARC machine
+  language instruction passed to it as its first argument.  It will produce a
+  character string which represents that machine language instruction in
+  human-readable form and store it in the array (the second argument).
+
+  The support module will recognize the nine ARC instructions in the set:
+  {ld, st, sethi, andcc, orcc, orncc, srl, addcc, call}.
+
+  A machine language instruction will be represented by a mnemonic and one or
+  more operands.  The mnemonics for the ARC machine language instructions are
+  listed in Figure 4-7 of the Murdocca and Heuring text (page 110).
+
+  Operands will be represented according to the following chart:
+
+    register numbers  -- as "%rN", where N is a decimal number
+    signed immediates -- as signed decimal numbers
+    target addresses  -- as "PC+0xNNNNNNNN", where the offset is a byte count
+    other operands    -- as hexadecimal numbers (with a leading "0x")
+
+  There will be one or more spaces between the mnemonic and the operands, and
+  one space between operands.
+
+  An appropriate character string will be produced for invalid machine
+  language instructions.
+
+  3) You will develop a driver module to test your implementation of function
+  "decode" in your support module.  The source code for the driver module must
+  be in a separate file.  All output will be appropriately labeled.
+
+  Your driver module will not be interactive.  If it accepts any input, you
+  will supply that input in a text file named "proj07.tests".
+
+
+
+Assignment Deliverables:
+
+  The deliverables for this assignment are:
+
+    proj07.makefile  -- the makefile which produces "proj07"
+    proj07.support.c -- the source code for your support module
+    proj07.driver.c  -- the source code for your driver module
+    proj07.tests     -- the input to your driver module, if needed
+
+  Be sure to use the specified file names, and to submit your files for
+  grading via the "handin" program.
+
+Assignment Notes:
+
+  1) Chapter 4 of the Murdocca and Heuring text contains relevant information
+  about the ARC microprocessor (particularly pages 108-120).
+
+  2) The human-readable form of the machine language instructions will be
+  SPARC assembly language instructions.
+
+  Consider the following example:
+
+    char destination[40];
+
+    decode( 0x98816003, destination );
+
+  After returning from the support module, "destination" would contain a
+  character string similar to "addcc  %r5, 3, %r12".
+
+  Some suggestions about the appearance of the character strings:
+
+    Test Case     Human-readable Format
+    ----------    ---------------------
+    0x86884002    andcc  %r1, %r2, %r3
+    0x82906001    orcc   %r1, 1, %r1
+    0xC200E810    ld     [%r3+2064], %r1
+    0xC2214007    st     %r1, [%r5+%r7]
+    0x03304F15    sethi  0x304F15, %r1
+    0x7FFFFFCE    call   PC+0xFFFFFF38
+
+  3) You might consider using functions from the standard C library to assist
+  you in formatting the character string.  For example:
+
+    char result[80];
+
+    sprintf( result, "Opcode: %#2x (%s)", 16, "addcc" );
+
+  After returning from "sprintf", "result" would contain the character string
+  "Opcode: 0x10 (addcc)".
+
+  Please note that "printf" and "sprintf" are functionally equivalent, with
+  one exception:  "printf" builds its character string in a system output
+  buffer which is eventually flushed to the standard output stream, while
+  "sprintf" builds its character string in the array explicitly supplied as
+  its first argument.
+

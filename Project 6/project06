@@ -1,0 +1,125 @@
+
+
+CSE 320 Fall 2015
+
+Computer Project #6 -- Floating Point Representation and Operations
+
+Assignment Overview:
+
+  For this assignment, you will develop a C function which adds single
+  precision floating point values without the use of floating point hardware.
+
+  It is worth 40 points (4% of course grade), and must be completed no later
+  than 11:59 PM on Thursday, October 22.
+
+Assignment Specifications:
+
+  1) Some computer systems do not have floating point hardware (they have an
+  Integer Unit, but not a Floating Point Unit).  Thus, floating point
+  operations on those systems must be performed using software.
+
+  You will develop the C function listed below:
+
+    float add( float, float );
+
+  The two arguments are the single precision floating point values to be
+  added, and the return value is the sum of those two values.
+
+  Arguments which are denormal will be processed as the value zero.
+
+  If either argument is the floating point value "not-a-number", function
+  "add" will return that value.  Otherwise, if either argument is the floating
+  point value "infinity", function "add" will return that value.
+
+  The value returned from function "add" will be as accurate as possible.
+
+  Function "add" (and any associated "helper" functions which you develop)
+  will constitute a module named "proj06.support.c".  The functions in that
+  support module will not call any C library functions, and they will not use
+  any floating point operations.  There is one exception:  the functions may
+  use the assignment operation to copy a floating point value from one
+  variable to another.
+
+  2) You will develop a driver module to test your implementation of function
+  "add" in your support module.  The source code for the driver module must be
+  in a separate file.  All output will be appropriately labeled.
+
+  Your driver module will not be interactive.  If it accepts any input, you
+  will supply that input in a text file named "proj06.tests".
+
+Assignment Deliverables:
+
+  The deliverables for this assignment are:
+
+    proj06.makefile  -- the makefile which produces "proj06"
+    proj06.support.c -- the source code for your support module
+    proj06.driver.c  -- the source code for your driver module
+    proj06.tests     -- the input to your driver module, if needed
+
+  Be sure to use the specified file names, and to submit your files for
+  grading via the "handin" program.
+
+
+
+Assignment Notes:
+
+  1) Please note that your driver module may not be written as an interactive
+  program, where the user supplies input in response to prompts.  Instead,
+  your test cases will either be included in the source code as literal
+  constants, or will be supplied as inputs to the driver module in a file
+  named "proj06.tests".
+
+  If your driver requires no inputs, your solution will be executed using:
+
+    proj06
+
+  If your driver does require inputs, your solution will be executed using:
+
+    proj06 < proj06.tests
+
+  2) The Murdocca and Heuring text contains information about floating point
+  representation and operations (particularly pages 45-48 and pages 74-76).
+
+  Please note that infinity, not-a-number, zero and denormal numbers are
+  special cases in IEEE floating point notation.
+
+  3) An outline of one method for computing C = A + B is given below:
+
+    Extract sign, exponent, and fraction fields of both A and B.
+    Place leading bit in both significands.
+    Determine exponent of C based on exponents of A and B; shift
+      significand of A or B (based on the difference between exponents).
+    Compute significand of C = significand of A + significand of B.
+    Normalize significand of C.
+    Insert sign, exponent, and fraction fields of C.
+
+  Note that this outline does not describe special cases, such as operands
+  which are infinity, not-a-number, zero or denormal numbers.
+
+  4) In order to work with a 32-bit item as both a floating point value and an
+  integer value, you might consider using a union.  For example:
+
+    #include <stdio.h>
+
+    union sp_item
+    {
+      float frep;
+      unsigned irep;
+    };
+
+    int main()
+    {
+      union sp_item num;
+
+      num.frep = 1.5;
+
+      printf( "Real: %f  Hex integer: %08x \n", num.frep, num.irep );
+    }
+
+  When compiled and executed, that program produces the following:
+
+    Real: 1.500000  Hex integer: 3fc00000 
+
+  Note that the four-byte memory location "num" can be referenced as both an
+  object of type "float" and an object of type "unsigned int".
+

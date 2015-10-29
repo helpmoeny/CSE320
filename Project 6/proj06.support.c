@@ -1,28 +1,15 @@
-//cse320 section 1
+//cse320 section 1	project6
 
 #include <stdio.h>
 #include "/user/cse320/Projects/project06.support.h"
-#include <string.h>
 
-
-float add( float, float )
+/* Can't finish working because the numbers I pass in arn't even correct So I can't test my other work to see if I'm doing it correctly 
+I understand the project in many aspects, but didn't move on to many special test cases because me and T.A King could not figure out why
+the values being passed in are not making it to proj06.support.c*/
+float add( float a, float b )
 {
-	union ufloat {
-		float f;
-		unsigned u;
-	};
-	typedef union
-	{
-		int i;
-		float f;
-	} U;
-	
-	ufloat u1;
-	u1.f = 0.3f;
-	
-	u.f = 10.0;
-
-    printf("%g = %#x\n", u.f, u.i);
+	printf( "value a: %f\n",a);	//These prints don't even print the values getting passed in! can't continue
+	printf( "value b: %f\n",b);	//These prints don't even print the values getting passed in!
 	
 	/* For computing C = A + B: Extract sign, exponent, and fraction fields of both A and B.
     Place leading bit in both significands.
@@ -31,79 +18,71 @@ float add( float, float )
     Compute significand of C = significand of A + significand of B.
     Normalize significand of C.
     Insert sign, exponent, and fraction fields of C. */
+	union sp_item numa;
+	signed true_expa;
+	numa.frep = a;
+	true_expa = ((numa.irep >> 23) & 0xff) - 0x7f;
+	printf( "truea: %08x\n",((numa.irep >> 23) & 0xff));
 	
-	
-  //Testing if base is in value range of (2,36) inclusive
-  /* if(base == 2 || base == 3 || base == 4 || base == 5 || base == 6 || base == 7 || base == 8 || base == 9 || base == 10 || base == 11 || base == 12 || base == 13 || base == 14 || base == 15 || base == 16 || base == 17 || base == 18 || base == 19 || base == 20 || base == 21 || base == 22 || base == 23 || base == 24 || base == 25 || base == 26 || base == 27 || base == 28 || base == 29 || base == 30 || base == 31 || base == 32 || base == 33 || base == 34 || base == 35 || base == 36 ){
-	  return 0;
-  } */
-  if(base >36 || base<2){return 1;}
-  int negative_value =0;
-  int value = 0;
-  *num = 0;
-  //int value = ch - '0';
-  //int value = (ch - 'A') + 10;
-  int i =0;
-  while(ch[i] != 0){
-  //printf("spot: %d\n", i);
-	  if(ch[i] == ' ' || ch[i] == '\n' || ch[i] == '\t'){			//WHITESPACE
-		if(value == 1){	//If a value charter was found, an empty space would be in value so return 0
-			return 1;	//Just stop and return the numbers we have before the space
-		}
-	  }
-	  else if(ch[i] == '-'){	//Negative-sign
-		if(value == 1){
-			return 1;	//Just stop and return the numbers we have before the negative-sign
-		}
-		else{
-			negative_value = 1;
-		}
-	  }
-	  else if(ch[i] == '+'){	//Positive-sign
-		if(value == 1){
-			return 1;	//Just stop and return the numbers we have before the positive-sign
-		}
-	  }
-	  else if((ch[i] >= '0') && (ch[i] <= '9')){
-		int curr = (ch[i] - '0');
-		if( curr >= base){
-			if(value == 0){return 0;}
-			break;
-		}
-		value = 1;
-		*num = (base * (*num)) + curr;
-	  }
-	  else if((ch[i] >= 'a') && (ch[i] <= 'z')){
-		int curr = ((ch[i]-'a')+10);
-		if( curr >= base){
-			if(value == 0){return 0;}
-			break;
-		}
-		value = 1;
-		*num = (base * (*num)) + curr;
-	  }
-	  else if((ch[i] >= 'A') && (ch[i] <= 'Z')){
-		int curr = ((ch[i]-'A')+10);
-		if( curr >= base){
-			if(value == 0){
-				return 0;
-			}
-			break;
-		}
-		value = 1;
-		*num = (base * (*num)) + curr;
-	  }
-	  else{
-		if(value == 0){return 0;}	//empty I think
-		return 1;	//If we find another character return the 'numbers' before the character
-		
-	  }
-	  i++;
-  }
-  if(negative_value == 1){
-		*num = 0-(*num);
-		//printf( "%d\n",*num);
-	  }
-  return 1;
+	union sp_item numb;
+	signed true_expb;
+	numb.frep = b;
+	true_expb = ((numb.irep >> 23) & 0xff) - 0x7f;
 
+	/* signBitMask = 0x80000;
+	expMask = 0x7C000;
+	mantissaMask = 0x03FF; */
+	
+	printf( "numa: %08x\n",numa.irep);
+	unsigned int a_sign = (numa.irep >> 31);
+	//unsigned int a_exp = ((numa.irep << 1) >> 24);	//biased exponent for a
+	unsigned int a_fracfield = ((numa.irep << 9) >> 9);
+	printf( "SignA= %08x ExpA= %d FracfieldA= %08x \n", a_sign, true_expa, a_fracfield );
+	//printf( "SignA= %d ExpA= %d FracfieldA= %d \n", a_sign, true_expa, a_fracfield );
+	
+	printf( "numb: %08x\n",numb.irep);
+	unsigned int b_sign = (numb.irep >> 31);
+	//unsigned int b_exp = ((numb.irep << 1) >> 24);	//biased exponent for b
+	unsigned int b_fracfield = ((numb.irep << 9) >> 9);
+	printf( "SignB= %08x ExpB= %d FracfieldB= %08x \n", b_sign, true_expb, b_fracfield );
+	//printf( "SignB= %d ExpB= %d FracfieldB= %d \n", a_sign, true_expb, a_fracfield );
+	
+	unsigned int siga = (a_fracfield | 0x008);
+	unsigned int sigb = (b_fracfield | 0x008); //83..
+	printf( "Siga= %d Sigb= %d \n", siga, sigb );
+	
+	/* if the significand is 0, the number represents infinity, and 
+	if the significand is not zero, that number represents a "NaN" ("Not a Number"): the result of a division by zero. Need to do this through looking at bit patterns */
+	if( siga==0 || sigb==0 ){return INFINITY;} //1/0 &infin;
+	
+	//Take the difference in the exponents, shift the smallest significand that many places right <<
+	unsigned int temp_exp;
+	if( true_expa > true_expb){
+		temp_exp = true_expa - true_expb;
+		sigb = (sigb >> temp_exp); //<<?
+		
+		unsigned int sigc = ( siga + sigb );
+		unsigned int fraction = sigc & 0xff7fffff;
+		unsigned int Sum = (fraction) | (temp_exp & 0x0000008f)<<23  | (a_sign& 0x00000001)<<31;	//bringing everything back together
+	}
+	else if( true_expa < true_expb ){
+		temp_exp = true_expb - true_expa;
+		siga = (siga >> temp_exp);	//<<?
+		
+		unsigned int sigc = ( siga + sigb );
+		unsigned int fraction = sigc & 0xff7fffff;
+		unsigned int Sum = (fraction) | (temp_exp & 0x0000008f)<<23  | (a_sign& 0x00000001)<<31;
+	}
+	else{
+		temp_exp = 0;	//No shifting needed exponents are the same
+		
+		unsigned int sigc = ( siga + sigb );
+		unsigned int fraction = sigc & 0xff7fffff;
+		unsigned int Sum = (fraction) | (temp_exp & 0x0000008f)<<23  | (a_sign& 0x00000001)<<31;
+	}
+	
+	//Overflow occurs when the biased exponent becomes too large to fit into the biased exponent field -- the result is the value Infinity.-
+	//Any arguments which are denormal will be processed as the value zero for this assignment.
+	
+	return sum;
 }     

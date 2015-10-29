@@ -1,0 +1,127 @@
+
+Notes on Computer Project #7
+----------------------------
+
+Comments about the assignment and responses to frequently asked questions will
+be added to this file as necessary.
+
+***** comments added on 10/19/15 *****
+
+1) Please note that you are required to create a makefile which controls the
+translation of your program, and that the name of your executable file must be
+"proj07".
+
+2) For your convenience, I have supplied the following interface file, which
+contains the declaration of function "decode":
+
+  ~cse320/Projects/project07.support.h
+
+Since that file may not be modified, there is no reason to copy it into your
+account.  Instead, use its absolute pathname in the appropriate preprocessor
+directive.  For example:
+
+  #include "/user/cse320/Projects/project07.support.h"
+
+Any program which uses that function should contain the appropriate
+preprocessor directive.
+
+3) Please note that this project focuses on a subset of the ARC instruction
+set, which contains only 9 instructions:
+
+    {ld, st, sethi, andcc, orcc, orncc, srl, addcc, call}.
+
+It does not focus on the entire instruction set for the SPARC microprocessor.
+
+4) I have posted two figures from the textbook (Figure 4.7 and Figure 4.11)
+as "project07.arc.pdf".
+
+5) Function "printf" and its relatives (such as "sprintf") recognize some
+conversion specifications that may be useful to you.  For example, consider
+the following lines of C source code and the output they produce:
+
+  unsigned A = 0xA6;
+  printf( "A: %#08x\n", A );         // displays "A: 0x0000a6"
+
+  printf( "Percent sign: %%\n" );    // displays "Percent sign: %"
+
+To left-justify a character string, use something like "%-10s" when you call
+"printf" and its relatives.
+
+For more details, see the on-line manual ("man -s 3c printf").
+
+6) The C "string" library may be useful to you.  For example, the "strcpy"
+function can be used to copy C-style character strings (arrays of type "char",
+terminated by a null byte) and the "strlen" function can be used to determine
+the length of a C-style character string:
+
+  char buffer[80];
+  strcpy( buffer, "addcc" );
+
+  printf( "'%s' contains %d characters\n", buffer, strlen( buffer ) );
+
+Those lines of C source code produce the following output:
+
+  addcc contains 5 characters
+
+You may wish to review the source code in:
+
+  ~cse320/Projects/project07.sample.c
+
+For more details, see the on-line manual ("man -s 3c string").
+
+7) Be sure to test your solution with a variety of different 32-bit SPARC
+instructions.  To generate the test cases, you might consider using the
+"gcc" package to do some of the work of translating the assembly language
+instructions into machine language.
+
+For example, you could call "memdump" and observe the ".text" area of memory.
+Example #14 uses this approach:
+
+  MEMORY CONTENTS [00010aec to 00010d6b]
+    00010aec: 9d e3 bf a0 31 00 00 86 b0 16 21 d4 e0 06 00 00
+    ...
+
+The "31000086" is from a SETHI instruction, and the "b01621d4" is from an OR
+instruction (the pair of instructions derived from the "set" synthetic
+instruction we talked about at lecture).
+
+Or, you could use "dis" to observe the machine language instructions:
+
+  <...> gcc -c example14.s
+  <...> dis example14.o
+
+You could use "dis a.out", but the output would contain the machine language
+instructions for all of the library functions, as well as your function.
+
+Another approach would be to turn some assembly code into object code, then
+use "dis" to match the machine language insructions back to assembly language
+instructions.  Here's a quick example:
+
+  <...> cat test.s
+
+        add     %r5, %r6, %r10
+        orcc    %r7, 0xff, %r8
+
+  <...> gcc -c test.s
+
+  <...> dis test.o
+                ****   DISASSEMBLER  ****
+
+
+  disassembly for test.o
+
+  section .text
+             0:  94 01 40 06         add          %g5, %g6, %o2
+             4:  90 91 e0 ff         orcc         %g7, 0xff, %o0
+
+Notice that you don't have to create complete assembly language programs to
+use this technique.
+
+One comment:  notice that "dis" uses the alternate notation for the general
+purpose registers (see page 11 of the course pack, or Table 4-1 in the SPARC
+Architecture Manual).  In that notation, the 32 registers are broken up into
+four groups of eight registers:  %g0 is the same as %r0, %o0 is the same as
+%r8, %l0 is the same as %r16, %i0 is the same as %r24, and so on.
+
+--M. McCullen
+
