@@ -1,0 +1,76 @@
+
+Notes on Computer Project #8
+----------------------------
+
+Comments about the assignment and responses to frequently asked questions will
+be added to this file as necessary.
+
+***** comments added on 10/26/15 *****
+
+1) As stated on the assignment handout, you are required to create a makefile
+which controls the translation of your program, and the name of your
+executable file must be "proj08".
+
+2) As stated on the assignment handout, your program will be assembled and
+linked using "gcc".
+
+3) Please note the following statements on the assignment handout:
+
+  In order to interface SPARC assembly language functions with standard
+  library functions (such as "getchar" and "printf"), you must follow certain
+  conventions about register usage.
+
+  a) The standard library function assume that the calling function will place
+  up to six parameters in registers %r8 through %r13 (with the first argument
+  in register %r8).
+
+  b) The standard library functions place their return value in register %r8
+  before returning to the calling function.
+
+  c) Registers %r14, %r15, %r30 and %r31 are used to manage the run-time stack
+  of activation records and their contents must not be modified by your
+  function.
+
+  d) Registers %r0 through %r7 are shared between all functions in a program.
+  Since they are global, a function should not assume that their contents are
+  the same before and after a call to another function.
+
+  e) Registers %r16 through %r23 are local to a given function.  Thus, that
+  function can assume that their contents are the same before and after a call
+  to another function.
+
+To summarize:
+
+  -- use registers %r16 - %r23 (and possibly registers %r24 - %r29) for your
+       intermediate results
+
+  -- use %r8 - %r13 to pass values to other functions, and %r8 as the register
+       containing a return value
+
+  -- do not use %r14, %r15, %r30 or %r31
+
+More information is available in the SPARC Architecture Manual and the SPARC
+Assembly Language Reference Manual, both of which are available from the
+course website under "related links".
+
+4) There are a variety of methods that you could use to create text files that
+contain control characters in order to thoroughly test their program.
+
+You might consider writing a simple C program that loops from 0 to 127 and
+outputs each value as a single character (using "putchar").
+
+Also, most text editors will allow you to insert control characters into a
+text file.  Using "vi", you can use "control-X" to enter many control
+characters (for example, holding down the control key and touching "l" inserts
+a formfeed into the file).  Characters which have a special meaning can be
+entered using "control-v" as an escape sequence (for example, "control-v
+control-h" will insert a backspace.
+
+Example #1 in the coursepack gives the complete ASCII table, including the
+underlying value for the control characters.
+
+To view the contents of a text file, you might consider using the "od" utility
+program.  Useful variations include "od -x filename" and "od -c filename".
+
+--M. McCullen
+
