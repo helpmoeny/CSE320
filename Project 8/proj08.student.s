@@ -3,7 +3,7 @@
 		.align 4
 
 main:		save	%sp, -96, %sp
-		clr	%r16	! total # of characters
+		clr	%r16	! total # of characters			!make -f proj08.makefile, proj08 < test1.txt, od -c test1.txt
 		clr	%r17	! # of upper case letters (in the set {A-Z})
 		clr	%r18	! # of lower case letters (in the set {a-z})
 		clr	%r19	! # of decimal digits (in the set {0-9})
@@ -102,14 +102,14 @@ endHexLower:
 
 ifNewLine:
 		cmp	%r8, 0x0A	! NewLine
-		bgt	endNewLine
+		be	thenNewLine
 		nop
 
-		ba	thenNewLine
+		ba	endNewLine
 		nop
 thenNewLine:
 		inc	%r21
-		!inc %r22	!also needs to be added to whitespace
+		inc %r22	!also needs to be added to whitespace
 endNewLine:
 
 ifWhiteSpace:		
@@ -121,25 +121,25 @@ ifWhiteSpace:
 		be	thenWhiteSpace
 		nop
 		
-		ba	thenWhiteSpace
+		ba	endWhiteSpace
 		nop
 thenWhiteSpace:
 		inc	%r22
 endWhiteSpace:
 
 ifControlChar:
+		cmp	%r8, 0x7F	! esc char
+		be	thenControlChar
+		nop
+
 		cmp	%r8, 0x00
 		blt	endControlChar
 		nop
-
+		
 		cmp	%r8, 0x1F	! control char
 		bgt	endControlChar
 		nop
-		
-		cmp	%r8, 0x7F	! esc char
-		bgt	endControlChar
-		nop
-
+	
 		ba	thenControlChar
 		nop
 thenControlChar:
