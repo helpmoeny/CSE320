@@ -1,0 +1,106 @@
+
+
+CSE 320 Fall 2015
+
+Computer Project #9 -- SPARC Subprograms
+
+Assignment Overview:
+
+  This assignment develops familiarity with subprograms in assembly language.
+  You will develop a set of SPARC assembly language functions which implement
+  common mathematical functions.
+
+  It is worth 40 points (4% of course grade), and must be completed no later
+  than 11:59 PM on Thursday, November 12.
+
+Assignment Specifications:
+
+  1) You will develop the SPARC assembly language functions listed below:
+
+    int negate( int N );
+    int absolute( int N );
+
+    int add( int A, int B );
+    int sub( int A, int B );
+    int mul( int A, int B );
+    int divide( int A, int B );
+    int remain( int A, int B );
+
+    int power( int N, int I );
+    int factorial( int N );
+
+  Those nine functions (and any associated "helper" functions which you
+  develop) will constitute a module named "proj09.support.s".  The functions
+  in that module will not use any SPARC floating point instructions and they
+  will not call any C library functions.
+
+  Function "negate" will return the negation of N.
+
+  Function "absolute" will return the absolute value of N.
+
+  Function "add" will return the sum of A and B.
+
+  Function "sub" will return the value of B subtracted from A.
+
+  Function "mul" will return the product of A and B.
+
+  Function "divide" will return the quotient of A divided by B.
+
+  Function "remain" will return the remainder of A divided by B.
+
+  Function "power" will return N raised to the Ith power.
+
+  Function "factorial" will return N!.
+
+  All functions will return the value 0x80000000 for error conditions.
+
+
+
+  2) You will develop a driver module in C to test your implementation of the
+  functions in your support module.  The source code for the driver must be in
+  a separate file.  All output will be appropriately labeled.
+
+  Your driver will not be interactive.  If your driver accepts any input, you
+  will supply that input in a text file named "proj09.tests".
+
+Assignment Deliverables:
+
+  The deliverables for this assignment are:
+
+    proj09.makefile  -- the makefile which produces "proj09"
+    proj09.support.s -- the source code for your support module
+    proj09.driver.c  -- the source code for your driver module
+    proj09.tests     -- the input to your driver, if needed
+
+  Be sure to submit your files for grading via the "handin" program.
+
+Assignment Notes:
+
+  1) All function arguments are passed in the IU registers, which are managed
+  using the "SAVE/RESTORE" convention.  The calling function places the
+  arguments in the "out" registers; after executing a "SAVE" instruction, the
+  called function finds the arguments in the "in" registers.
+
+  2) The return value from a function is also passed in an IU register.  The
+  called function places the return value in register "%i0"; after the called
+  function executes a "RESTORE" instruction, the calling function finds the
+  return value in register "%o0".
+
+  3) Please note that your driver may not be written as an interactive
+  program, where the user supplies input in response to prompts.  Instead,
+  your test cases will either be included in the source code as literal
+  constants, or will be supplied as inputs to the driver in a file named
+  "proj09.tests".
+
+  If your driver requires no inputs, your solution will be executed using:
+
+    proj09
+
+  If your driver does require inputs, your solution will be executed using:
+
+    proj09 < proj09.tests
+
+  4) The functions in your support module must be hand-written SPARC assembly
+  language functions (you may not submit compiler-generated assembly language
+  functions).
+

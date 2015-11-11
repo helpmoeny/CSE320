@@ -1,0 +1,139 @@
+
+Notes on Computer Project #9
+----------------------------
+
+Comments about the assignment and responses to frequently asked questions will
+be added to this file as necessary.
+
+***** comments added on 11/02/15 *****
+
+1) Please note the following statement from the assignment handout:
+
+  The deliverables for this assignment are:
+
+    proj09.makefile  -- the makefile which produces "proj09"
+    proj09.support.s -- the source code for your support module
+    proj09.driver.c  -- the source code for your driver module
+    proj09.tests     -- the input to your driver, if needed
+
+  Be sure to submit your files for grading via the "handin" program.
+
+It is possible to submit your solution files multiple times:  the last files
+that you submit will be graded.
+
+2) Please note that you are required to create a makefile which controls the
+translation of your program, and that the name of your executable file must be
+"proj09".
+
+3) For your convenience, I have supplied the following file:
+
+  ~cse320/Projects/project09.support.h
+
+That file contains declarations of the functions that are required in your
+support module.
+
+Since that file may not be modified, there is no reason to copy it into your
+account.  Instead, use its absolute pathname in the appropriate preprocessor
+directive.  For example:
+
+  #include "/user/cse320/Projects/project09.support.h"
+
+Any C source code which invokes those functions should contain the appropriate
+preprocessor directive.
+
+4) Please note the following statements from the assignment handout:
+
+  Those nine functions (and any associated "helper" functions which you
+  develop) will constitute a module named "proj09.support.s".  The functions
+  in that module will not use any SPARC floating point instructions and they
+  will not call any C library functions.
+
+You may wish to use "printf" or the "reglib" functions to display intermediate
+results as you develop your support module, but be sure to remove those calls
+(or turn them into comments) before submitting your work.
+
+Please recall that the "reglib" functions are useful to help you trace
+execution-time errors.  In particular, "iu_window" can be used to observe the
+values in the IU registers.
+
+Of course, you must link the "reglib" module to your object code module in
+order to use those functions.  The following command was used in Example #18:
+
+  gcc example18.driver.s example18.support.s ~cse320/lib/reglib.o
+
+5) I recommend that you develop your solution in a top-down manner.  For
+example, you might concentrate on developing a simple version of the driver
+module first, with the other functions being implemented as stubs which return
+a constant value.
+
+At that point, you can begin incrementally developing the support module (and
+extending your driver module to test the new capabilities of those
+functions).
+
+6) Think carefully about the error conditions which can occur.  Some errors
+involve invalid arguments, and some involve invalid results.  Regardless of
+the cause, the functions should return the integer value 0x80000000 when an
+error is detected.  That value is the smallest integer value that can be
+represented as a 32-bit two's complement value.
+
+7) Overflow is a possibility in most of the functions and should be considered
+an error condition.  To check for overflow, you may be able to use the V bit
+in the NZVC condition code bits.  For example, section B.13 discusses the
+"addcc" instruction and section B.18 discusses "smulcc".
+
+If you check the pages in the SPARC Architecture Manual, you'll notice that
+"addcc" sets all four bits of the integer condition codes (NZVC) based on the
+result of the operation.  On the other hand, "smulcc" only sets N and Z based
+on the result (V and C are always set to 0).
+
+Here are some of the statements from the manual:
+
+  The multiply instructions perform 32-bit by 32-bit multiplications,
+  producing 64-bit results.  They write the 32 most significant bits of the
+  product into the Y register and the 32 least significant bits into r[rd].
+
+  Programming note:  32-bit overflow after SMUL/SMULcc is indicated by 
+  Y != ( r[rd] >> 31 ).
+
+In other words, if any of the bits in the Y register are significant, the
+result was too large to fit into 32 bits.
+
+8) Some additional commentary about multiplication and division:  the
+multiplication instructions (SMUL and UMUL) and the division instructions
+(SDIV and UDIV) use the Y register.  The SPARC Architecture Manual has all of
+the details in B.18 and B.19; a brief overview is presented below.
+
+The multiplication instructions take two 32-bit operands and generate a 64-bit
+product, where the most significant 4 bytes are in the Y register and the
+least significant 4 bytes are in R[rd].  SMULcc does not update the V bit of
+the integer condition code bits (NZVC), but overflow can be detected using:
+Y != (R[rd] >> 31).  That is, overflow occurred if the Y register does not
+contain 32 copies of the sign bit from R[rd].
+
+The division instructions generate a 32-bit quotient by dividing a 32-bit
+divisor into a 64-bit dividend, where the most significant 4 bytes are in the
+Y register and the least significant 4 bytes are in R[rs1].  SDIVcc does
+update the V bit of the integer condition code bits (NZVC).
+
+The following synthetic assembly language instructions allow you to copy the
+contents of the Y register into a general-purpose register (and vice versa):
+
+  mov  %y, %l7
+  mov  %l6, %y
+
+Those synthetic instructions correspond to the RDY and WRY machine language
+instructions.
+
+9) For the remainder in the context of integer division, let's use the same
+approach as C:
+
+   +51 / +10 = +5 R +1
+   -52 / +10 = -5 R -2
+   +53 / -10 = -5 R +3
+   -54 / -10 = +5 R -4
+
+The calculations above were done using the "/" and "%" operator symbols 
+on objects of type "int".
+
+--M. McCullen
+
