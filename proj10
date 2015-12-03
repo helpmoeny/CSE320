@@ -1,0 +1,121 @@
+.global  view
+.section ".text"
+.align 4
+
+view:
+      save %sp, -96, %sp
+
+      clr   %l3       ! will be used for count of elements
+      clr   %l4       ! will be used for incremental count to compare to l3
+
+      lduh [%i0 + 2], %l3 ! Count of elements
+      ld  [%i0 + 4], %l1  ! Go to address of first player element
+
+! loop to go thru table of players to look for jersey number
+
+loop:
+      lduh [%l1], %l0     ! Jersey number
+      cmp  %l0, %i1       ! compare current jersey # w/ parameter jersey #
+      be   found          ! branch to found if jersey # is found
+      nop
+
+      inc  %l4            ! increment how many times we have looped
+      cmp  %l4, %l3       ! if increment count is equal to count of table
+                          ! that means we have gone thru whole table
+      be    notfound      ! so then we branch to notfound
+      nop
+
+      add   %l1, 40, %l1   ! go to next element (add 40 to current address)
+      ba loop              ! go back to loop
+      nop
+
+
+notfound:
+
+        set 0, %i0        ! if not found, return 0 and then go to done branch
+        ba done
+        nop
+
+found:
+
+      set  fmt0, %o0    ! set up first format string
+      mov  %l0, %o1     ! jersey number
+      add  %l1, 2, %o2   ! name of player
+
+      lduh [%l1 + 26], %o3 ! Games played
+      lduh [%l1 + 28], %o4  ! Goals
+      lduh [%l1 + 30], %o5  ! Assists
+
+      call printf       ! print first format string
+      nop
+
+      set  fmt1, %o0    ! set up second format string
+      lduh [%l1 + 32], %o1  ! Points
+      ld   [%l1 + 36], %o2  ! PPG
+      call printf           ! print second format string
+      nop
+
+      set   1, %i0          ! return 1 (found)
+
+
+
+
+done:
+
+      ret
+      restore
+
+fmt0:
+      .asciz "\nJersey: %d Name: %s Games played: %d Goals: %d Assists: %d\n"
+
+fmt1:
+      .asciz "\nPoints: %d PPG: %08x\n"
+
+
+
+
+.global  search
+.section ".text"
+.align 4
+
+search:
+      save %sp, -96, %sp
+
+      clr   %l3       ! will be used for count of elements
+      clr   %l4       ! will be used for incremental count to compare to l3
+
+      lduh [%i0 + 2], %l3 ! Count of elements
+      ld   [%i0 + 4], %l1  ! Go to address of first player element
+
+
+! loop to go thru table of players to look for jersey number
+
+loop2:
+      lduh [%l1], %l0     ! Jersey number
+      cmp  %l0, %i1       ! compare current jersey # w/ parameter jersey #
+      be   found2         ! branch to found if jersey # is found
+      nop
+
+      inc  %l4            ! increment how many times we have looped
+      cmp  %l4, %l3       ! if increment count is equal to count of table
+                          ! that means we have gone thru whole table
+      be    notfound2     ! so then we branch to notfound
+      nop
+
+      add   %l1, 40, %l1   ! go to next element (add 40 to current address)
+      ba loop2             ! go back to loop
+      nop
+
+notfound2:
+      set 0, %i0          ! return 0 (not found, no pointer stored)
+      ba  done2           ! branch to done2
+      nop
+
+found2:
+      set  1, %i0         ! if jersey number was found, return 1, and
+      st   %l1, [%i2]     ! set 3rd parameter pointer to address of %l1
+
+done2:
+
+      ret
+      restore
