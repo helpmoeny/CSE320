@@ -1,0 +1,251 @@
+
+Notes on Computer Project #12
+-----------------------------
+
+Comments about the assignment and responses to frequently asked questions will
+be added to this file as necessary.
+
+***** comments added on 11/30/15 *****
+
+1) Please note the following statement from the assignment handout:
+
+  The deliverables for this assignment are:
+
+    proj12.makefile  -- the makefile which produces "proj12"
+    proj12.support.s -- the source code for your support module
+    proj12.driver.c  -- the source code for your driver module
+    proj12.tests     -- the input to your driver, if needed
+
+  Be sure to submit your files for grading via the "handin" program.
+
+It is possible to submit your solution files multiple times:  the last files
+that you submit will be graded.
+
+2) Please note that you are required to create a makefile which controls the
+translation of your program, and that the name of your executable file must be
+"proj12".
+
+3) Please note the following statement from the assignment handout:
+
+  You will develop a driver to test your implementation of the functions in
+  the support module.  The C source code for the driver must be in a separate
+  file.  All output will be appropriately labeled.
+
+  Your driver will not be interactive.  If your driver accepts any input, you
+  will supply that input in a text file named "proj12.tests".
+
+Your driver may not be written as an interactive program, where the user
+supplies input in response to prompts.  Instead, your test cases will either
+be included in the source code as literal constants, or will be supplied as
+inputs to the driver in a file named "proj12.tests".
+
+4) Be sure to declare the functions which are part of your support module
+before invoking them in the driver module.  For example:
+
+  double absolue( double );
+
+  int main()
+  {
+    double X = absolute( -25.0 );
+  }
+
+If you don't declare a function before invoking it, a C compiler assumes that
+the function has a return value of type "int" (a C++ compiler uses tighter
+type checking rules and rejects an invocation of a function which has not be
+been declared).
+
+For your convenience, I have supplied the following file:
+
+  ~cse320/Projects/project12.support.h
+
+That file contains declarations of the functions that are required in your
+support module.
+
+Since that file may not be modified, there is no reason to copy it into your
+account.  Instead, use its absolute pathname in the appropriate preprocessor
+directive.  For example:
+
+  #include "/user/cse320/Projects/project12.support.h"
+
+Any C source code which invokes those functions should contain the appropriate
+preprocessor directive.
+
+I have included "union dp_item" inside that interface file, which might be
+useful for creating specific floating point values inside your driver module.
+You may wish to review "project12.example.c", which illustrates how to use
+"union dp_item".  Please note the comments at the top of that file.
+
+5) Please note that most of the arguments and return values in this project
+are objects of type "double", which are 8 bytes wide.  There are several
+consequences:
+
+a. Two consecutive FPU registers are used to hold double precision values,
+where the first register must be an even-numbered register.
+
+b. When "ldd" or "std" are used, the effective address must be a multiple of 8
+(objects of type "double" must be aligned on an 8-byte boundary in memory).
+
+c. The number of bytes allocated in the stack must always be a multiple of 8,
+regardless of any other considerations.
+
+The document titled "Introduction to SPARC Assembly Language" (on the course
+website and in the coursepack) has a section on floating point programming.
+
+6) Please note the following from the assignment handout:
+
+  Please note that the floating point registers are global; they are not
+  windowed via the "SAVE" and "RESTORE" instructions.
+
+Since the floating point registers are global, they are shared by all
+functions within a program.  Thus, any function can change the value of any FP
+register.
+
+If a function calls some other function and needs a FP register to contain a
+particular value both before and after calling the other function, the calling
+function must take certain steps:
+
+   -- store the contents of the FP register into memory
+   -- call the other function
+   -- load from memory back into the FP register
+
+This convention is known as "caller save"; Murdocca and Heuring discuss this
+and related ideas in Chapter 4.
+
+7) Please note the following from the assignment handout:
+
+  The conventions used for passing floating point parameters between
+  subprograms are similar to those used for integer parameters:  all arguments
+  (including floating point operands) are passed to functions in the integer
+  registers, which are managed using the "save/restore" convention.  However,
+  a floating point value is returned from a function in register f0, rather
+  than register i0/o0.
+
+Since a value of type "double" is 64 bits in length, it is passed in a pair
+of IU registers.  For example:
+
+   double absolute( double );
+
+The argument to "absolute" is placed in registers %o0 and %o1, and thus
+appears in registers %i0 and %i1 after the "SAVE" instruction in the prologue
+of "absolute".
+
+Function "absolute" places the return value in registers %f0 and %f1 before
+returning control to the calling function.
+
+8) Please recall that there are several utility programs available to help you
+convert between internal and external representation of floating point
+values:
+
+  lab07.makedp -- given internal representation, display external rep.
+  lab07.viewdp -- given external representation, display internal rep.
+
+9) The set of utility functions in "reglib.o" contains three functions
+("fpu_registers", "dp_registers" and "sp_registers") which are useful to
+display the contents of the floating point registers.  An example of the
+output produced by "dp_registers" is shown below:
+
+  DP REGISTERS  fsr: 00000821  fcc: 2 (GT)
+    f00: 40238d4fdf3b645b  (+9.776000000000002e+00)
+    f02: ffffffffffffffff  (-NaN)
+    f04: ffffffffffffffff  (-NaN)
+    f06: ffffffffffffffff  (-NaN)
+    f08: 0000000500000000  (+1.060997895482636e-313)
+    f10: 4014000000000000  (+5.000000000000000e+00)
+    f12: ffffffffffffffff  (-NaN)
+    f14: ffffffffffffffff  (-NaN)
+    f16: 404870a3d70a3d72  (+4.888000000000001e+01)
+    f18: 4024ae147ae147ae  (+1.034000000000000e+01)
+    f20: ffffffffffffffff  (-NaN)
+    f22: ffffffffffffffff  (-NaN)
+    f24: 3ff0000000000000  (+1.000000000000000e+00)
+    f26: bff0000000000000  (-1.000000000000000e+00)
+    f28: ffffffffffffffff  (-NaN)
+    f30: ffffffffffffffff  (-NaN)
+
+Similarly, "sp_registers" displays the contents of the FPU registers as single
+precision values.
+
+10) In function "factorial", you should do all of your calculations using
+floating point values, rather than calculating with integer values and
+converting to a floating point value at the end.  Integer calculations will
+overflow for an argument value of 12 or 13, while floating point calculations
+will have a much larger range.
+
+11) Please note the following from the assignment handout:
+
+  Function "sine" will use the power series approximation method to compute
+  the sine of X.  The computed values will be accurate to at least eight
+  fractional digits.
+
+To achieve the desired accuracy, you might expand each power series
+approximation until you reach a term whose absolute value is less than 1.0e-9
+(that term should not be included in the computed value of the power series).
+
+Please note that the number of terms used in the power series to get a good
+approximation of the sine of X will increase as X gets larger.  For example,
+it might take 7 terms in the power series to compute the sine of 1.0, while it
+might take 9 terms to compute the sine of 2.0 (and so on).
+
+Recall that the sine function is a periodic function, with a period of 2*PI.
+Thus, you may wish to map the value of X (the function argument) into a
+specific range (such as 0 to 2*PI or -PI to +PI).  This will reduce the number
+of terms which must be computed to get a good approximation.
+
+12) If you call any of your assembly language functions (such as "power" or
+"factorial") from inside your "sine" function, it would be a good idea to make
+sure that those functions are correct.  In particular, you should test
+"factorial" with arguments that are likely to arise inside "sine".
+
+13) The most precise value of PI that can be expressed as a double precision
+floating point value is available in "math.h":
+
+  #define M_PI 3.14159265358979323846
+
+14) When in doubt, make your functions perform the same way as the functions
+in the standard math library.  Here's the mapping:
+
+  absolute  -- fabs
+  modulo    -- fmod
+  factorial -- no equivalent function
+  power     -- pow
+  sine      -- sin
+
+For example, here's the output for a simple program that calls "fmod":
+
+  fmod( +20.0, +3.0 ): +2.000000
+
+  fmod( +20.0, -3.0 ): +2.000000
+
+  fmod( -20.0, +3.0 ): -2.000000
+
+  fmod( -20.0, -3.0 ): -2.000000
+
+Please note that you may need to use the "-lm" option when you link in order
+to access the definitions in the math library.
+
+15) I want to make sure that everyone understands one particular aspect of the
+specifications.  The handout states:
+
+  The functions in the support module will not call any C library functions
+  (such as "printf", "fabs", "fmod", "pow", "sin" or "cos").
+
+  The functions in the support module (as well as any other support functions
+  you choose to develop) will be implemented in assembly language.
+
+That is, you may not call any C library function (such as "fabs", "fmod",
+"pow", "sin" or "cos") inside your support module.
+
+The functions in your support module will be written in SPARC assembly
+language, and you may use any valid assembly language instruction (including
+"fabss", "fitod", and so on).
+
+16) Your driver module will be written in C, and it might be convenient to use
+certain C library functions to check the accuracy of the functions in your
+support module.  For example, you might wish to call function "fabs", as well
+as your function "absolute", and then compare the return values.
+
+As Item #14 (above) notes, you may have to use the "-lm" option when you link
+the various object code files.
+
+--M. McCullen
+

@@ -1,0 +1,110 @@
+
+
+CSE 320 Fall 2015
+
+Computer Project #12 -- SPARC Floating Point Operations
+
+Assignment Overview:
+
+  This assignment develops familiarity with SPARC floating point operations.
+  You will develop the assembly language functions described below, which
+  represent a subset of the functions available in a math library.
+
+  It is worth 40 points (4% of course grade), and must be completed no later
+  than 11:59 PM on Thursday, December 10.
+
+Assignment Specifications:
+
+  1) The math library subset will consist of the following functions:
+
+    double absolute( double X );
+    double modulo( double X, double Y );
+    double factorial( unsigned N );
+    double power( double X, unsigned N );
+    double sine( double X );
+ 
+  Function "absolute" will compute and return the absolute value of X.
+
+  Function "modulo" will compute and return the remainder of X divided by Y,
+  where the remainder has the same sign as X and has a magnitude less than the
+  magnitude of Y.  If Y is equal to zero, the function will return the double
+  precision value "Not A Number".
+
+  Function "factorial" will compute and return the factorial of N.  It will
+  convert N to a double precision floating point value and compute the
+  factorial of N using floating point calculations.
+
+  Function "power" will compute and return X raised to the Nth power.
+
+  Function "sine" will compute and return the value of the sine of X, where X
+  is measured in radians.
+
+  Function "sine" will use the power series approximation method (described
+  below) to compute the sine of X.  The computed values will be accurate to at
+  least eight fractional digits.
+
+  If overflow occurs during the computations inside any of the functions, that
+  function will return the double precision value "Infinity".
+
+  2) The functions in the support module will not call any C library functions
+  (such as "printf", "fabs", "fmod", "pow", "sin" or "cos").
+
+  The functions in the support module (as well as any other support functions
+  you choose to develop) will be implemented in assembly language.
+
+  3) You will develop a driver to test your implementation of the functions in
+  the support module.  The C source code for the driver must be in a separate
+  file.  All output will be appropriately labeled.
+
+  Your driver will not be interactive.  If your driver accepts any input, you
+  will supply that input in a text file named "proj12.tests".
+
+
+
+Assignment Deliverables:
+
+  The deliverables for this assignment are:
+
+    proj12.makefile  -- the makefile which produces "proj12"
+    proj12.support.s -- the source code for your support module
+    proj12.driver.c  -- the source code for your driver module
+    proj12.tests     -- the input to your driver, if needed
+
+  Be sure to submit your files for grading via the "handin" program.
+
+Assignment Notes:
+
+  1) For your convenience, the following file is available:
+
+    /user/cse320/Projects/project12.support.h
+
+  That file contains the function declarations listed above.
+
+  2) Please note that the floating point registers are global; they are not
+  windowed via the "SAVE" and "RESTORE" instructions.
+
+  3) The conventions used for passing floating point parameters between
+  subprograms are similar to those used for integer parameters:  all arguments
+  (including floating point operands) are passed to functions in the integer
+  registers, which are managed using the "save/restore" convention.  However,
+  a floating point value is returned from a function in register f0, rather
+  than register i0/o0.
+
+  4) A power series can be used to approximate the value of many trigonometric
+  functions.
+
+  Using "!" to represent the factorial function, the sine of a value can be
+  approximated using:
+
+                    3          5          7          9
+    sine(X) = X - (X / 3!) + (X / 5!) - (X / 7!) + (X / 9!) - ....
+
+  An individual term in this power series can be expressed as:
+
+        k  2k+1
+    (-1)  X
+    -----------
+      (2k+1)!
+
+  where "k" represents the position in the power series (k = 0, 1, 2, ....).
+
