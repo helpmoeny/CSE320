@@ -78,7 +78,7 @@ int main (int argc, const char * argv[]) {
 	printf( "Decimal: %d  Hexadecimal: %08x\n\n", num6, num6);
   }
   
-  char array7[]= "James Mitchell";		//Testing what should only convert (firstname)
+  char array7[]= "Name";		//Testing what should only convert (firstname)
   int base7 = 36;
   int num7 = 0;
   int T7 = convert(&array7[0], base7, &num7);
